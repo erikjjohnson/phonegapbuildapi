@@ -5,6 +5,7 @@
 , "author" : "German Escallon <germane@adtecinc.com>"
 , "homepage" : "http://github.com/germallon/phonegapbuildapi"
 , "dependencies":{
+      "underscore": "x.x.x",
       "request": "x.x.x",
       "mime": "x.x.x"
    }   

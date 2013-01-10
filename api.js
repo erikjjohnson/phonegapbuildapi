@@ -16,11 +16,18 @@
  **************************************************************************/
 
 var 
+_    = require('underscore'),
 _URL = 'build.phonegap.com',
 _fs = require('fs'),
 _https = require('https'),
 _mime = require('mime'),
 _req = require('request'),
+_defaultOptions = {},
+
+/* Set default options that will be merged into any request */
+setDefaultOptions = function(options) {
+   _defaultOptions = {},
+},
 
 /******************************************************************
  * Executes the GET Phonegap API call,
@@ -34,6 +41,7 @@ getApiData = function(token, apiCall, callback){
       host: _URL,
       path: '/api/v1/' + apiCall + '?auth_token='+token
       };
+   options = _.default(options, _defaultOptions);
    
    _https.get(options, function(res){
       var replyData = '';
@@ -62,7 +70,10 @@ downloadFile = function(url, outputFilepath, callback){
    var successCallback = (callback instanceof Function)? callback: (callback.success instanceof Function)? callback.success: function(){};
    var errCallback = (callback.error instanceof Function)? callback.error: function(){};
    
-   _req.get(url).pipe(_fs.createWriteStream(outputFilepath))
+   var options = {};
+   options = _.default(options, _defaultOptions);
+
+   _req.get(options, url).pipe(_fs.createWriteStream(outputFilepath))
       .on('error', function(e){errCallback(e.message);})
       .on('close', function(){successCallback(outputFilepath)});
 },
@@ -238,6 +249,7 @@ postMultipart = function(token, postData, boundary, apiCall, callback){
          'Content-Length': len
       }
    };
+   options = _.default(options, _defaultOptions);
    
    request = _https.request(options, function(response){
       var replyData = '';
@@ -340,7 +352,7 @@ _createFileBasedApp = function(token, inputFile, dataObj, callback){
  *****************************************************************/
 _updateFileBasedApp = function(token, inputFile, appId, callback){
    var apiPath = '/api/v1/apps/' + appId + '?auth_token=' + token;
-   _fs.createReadStream(inputFile).pipe(_req.put('https://build.phonegap.com' + apiPath))
+   _fs.createReadStream(inputFile).pipe(_req.put(_defaultOptions, 'https://build.phonegap.com' + apiPath))
    .on('error', function(e){if(callback.error instanceof Function){callback.error(e.message);}})
    .on('end', function(){
       if(callback instanceof Function){
@@ -381,7 +393,8 @@ _deleteFileBasedApp = function(token, appId, callback){
    var options = {  
       url : 'https://'+_URL+"/api/v1/apps/" + appId + '?auth_token=' + token
       }; 
-      
+   options = _.default(options, _defaultOptions);
+ 
    _req.del(options, function (error, response, body) {
       if(error){
          if(callback instanceof Function){
@@ -432,7 +445,8 @@ _createAuthToken = function(rawCredentials, callback){
       url : 'https://'+_URL+"/token",    
       headers : { "Authorization" : auth } 
       }; 
-   
+   options = _.default(options, _defaultOptions);
+
    _req.post(options, function (error, response, body) {
       if((error!==null) || (response.statusCode!=200))
          {
