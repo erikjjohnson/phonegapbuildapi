@@ -5,8 +5,8 @@
 , "author" : "German Escallon <germane@adtecinc.com>"
 , "homepage" : "http://github.com/germallon/phonegapbuildapi"
 , "dependencies":{
-      "request": "git://github.com/mikeal/request.git",
-      "mime": "git://github.com/broofa/node-mime.git"
+      "request": "http://github.com/mikeal/request.git",
+      "mime": "http://github.com/broofa/node-mime.git"
    }   
 , "repository" :
   { "type" : "git"
