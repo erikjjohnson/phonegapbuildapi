@@ -26,7 +26,7 @@ _defaultOptions = {},
 
 /* Set default options that will be merged into any request */
 setDefaultOptions = function(options) {
-   _defaultOptions = {},
+   _defaultOptions = options;
 },
 
 /******************************************************************
