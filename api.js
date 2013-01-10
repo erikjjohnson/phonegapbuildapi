@@ -25,7 +25,7 @@ _req = require('request'),
 _defaultOptions = {},
 
 /* Set default options that will be merged into any request */
-setDefaultOptions = function(options) {
+_setDefaultOptions = function(options) {
    _defaultOptions = options;
 },
 
@@ -471,6 +471,9 @@ _createAuthToken = function(rawCredentials, callback){
  *  Module Public Members
  *****************************************************************/
 module.exports = {
+   //Options
+   setDefaultOptions: _setDefaultOptions,
+
    //Read API
    getUserData: _getUserData,
    getAppsData: _getAppsData,
