@@ -24,7 +24,7 @@ _mime = require('mime'),
 _req = require('request'),
 _defaultOptions = {},
 
-/* Set default options that will be merged into any request */
+/* Set defaults options that will be merged into any request */
 _setDefaultOptions = function(options) {
    _defaultOptions = options;
 },
@@ -41,7 +41,7 @@ getApiData = function(token, apiCall, callback){
       host: _URL,
       path: '/api/v1/' + apiCall + '?auth_token='+token
       };
-   options = _.default(options, _defaultOptions);
+   options = _.defaults(options, _defaultOptions);
    
    _https.get(options, function(res){
       var replyData = '';
@@ -71,7 +71,7 @@ downloadFile = function(url, outputFilepath, callback){
    var errCallback = (callback.error instanceof Function)? callback.error: function(){};
    
    var options = {};
-   options = _.default(options, _defaultOptions);
+   options = _.defaults(options, _defaultOptions);
 
    _req.get(options, url).pipe(_fs.createWriteStream(outputFilepath))
       .on('error', function(e){errCallback(e.message);})
@@ -115,7 +115,7 @@ _getAppsData = function(token, callback){
  *  this detail view includes:
  *  
  *  keys: all of the keys that the app is currently being built with. 
- *    This will include the owner's default key for a platform, 
+ *    This will include the owner's defaults key for a platform, 
  *    if selected
  *    
  *  collaborators: each person who has access to this app, along 
@@ -249,7 +249,7 @@ postMultipart = function(token, postData, boundary, apiCall, callback){
          'Content-Length': len
       }
    };
-   options = _.default(options, _defaultOptions);
+   options = _.defaults(options, _defaultOptions);
    
    request = _https.request(options, function(response){
       var replyData = '';
@@ -323,11 +323,11 @@ initMultipartUpload = function(token, inputFile, reqData, apiCall, fieldName, ca
  *  debug: Builds your app in debug mode. Defaults to false.
  *  keys: Set the signing keys to use for each platform you wish to sign. 
  *  private: Whether your app can be publicly downloaded. Defaults to 
- *           true during beta period; will default to false once the 
+ *           true during beta period; will defaults to false once the 
  *           beta period is complete
  *  phonegap_version: Which version of PhoneGap your app uses. See 
  *                    config.xml for details on which are supported, 
- *                    and which one is currently the default
+ *                    and which one is currently the defaults
  *  
  * File-backed applications
  * 
@@ -393,7 +393,7 @@ _deleteFileBasedApp = function(token, appId, callback){
    var options = {  
       url : 'https://'+_URL+"/api/v1/apps/" + appId + '?auth_token=' + token
       }; 
-   options = _.default(options, _defaultOptions);
+   options = _.defaults(options, _defaultOptions);
  
    _req.del(options, function (error, response, body) {
       if(error){
@@ -445,7 +445,7 @@ _createAuthToken = function(rawCredentials, callback){
       url : 'https://'+_URL+"/token",    
       headers : { "Authorization" : auth } 
       }; 
-   options = _.default(options, _defaultOptions);
+   options = _.defaults(options, _defaultOptions);
 
    _req.post(options, function (error, response, body) {
       if((error!==null) || (response.statusCode!=200))
